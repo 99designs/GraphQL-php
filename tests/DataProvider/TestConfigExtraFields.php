@@ -17,6 +17,7 @@ class TestConfigExtraFields extends AbstractConfig
 
     protected $extraFieldsAllowed = true;
 
+    #[\Override]
     public function getRules()
     {
         return [

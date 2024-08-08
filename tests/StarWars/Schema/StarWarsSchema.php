@@ -14,6 +14,7 @@ use Youshido\GraphQL\Schema\AbstractSchema;
 class StarWarsSchema extends AbstractSchema
 {
 
+    #[\Override]
     public function build(SchemaConfig $config)
     {
         $config->setQuery(new StarWarsQueryType());

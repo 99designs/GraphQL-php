@@ -50,6 +50,7 @@ class Issue220Test extends TestCase
 
 class ArticleType extends AbstractObjectType
 {
+    #[\Override]
     public function build($config)
     {
         $config->addFields([

@@ -11,6 +11,7 @@ use Youshido\GraphQL\Type\Scalar\IntType;
 class Issue109Schema extends AbstractSchema
 {
 
+    #[\Override]
     public function build(SchemaConfig $config)
     {
         $config->setQuery(

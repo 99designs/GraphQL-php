@@ -58,9 +58,7 @@ class DeferredQueryBuffer
         $key = md5(serialize($ids));
         $this->buffer[$key] = $ids;
 
-        return function () use ($key) {
-            return $this->fetch($key);
-        };
+        return fn() => $this->fetch($key);
     }
 
     protected function fetch($resultId)
@@ -98,6 +96,7 @@ class DeferredUserType extends AbstractObjectType
     }
 
 
+    #[\Override]
     public function build($config)
     {
         $config->addField(
@@ -105,9 +104,7 @@ class DeferredUserType extends AbstractObjectType
             [
               'name' => 'name',
               'type' => new StringType(),
-              'resolve' => function ($value) {
-                  return $value['name'];
-              },
+              'resolve' => fn($value) => $value['name'],
             ]
           )
         );
@@ -117,11 +114,9 @@ class DeferredUserType extends AbstractObjectType
             [
               'name' => 'friends',
               'type' => new ListType(new DeferredUserType($this->database)),
-              'resolve' => function ($value) {
-                  return new DeferredResolver(
-                    $this->database->add($value['friends'])
-                  );
-              },
+              'resolve' => fn($value) => new DeferredResolver(
+                $this->database->add($value['friends'])
+              ),
             ]
           )
         );
@@ -131,11 +126,9 @@ class DeferredUserType extends AbstractObjectType
             [
               'name' => 'foes',
               'type' => new ListType(new DeferredUserType($this->database)),
-              'resolve' => function ($value) {
-                  return new DeferredResolver(
-                    $this->database->add($value['foes'])
-                  );
-              },
+              'resolve' => fn($value) => new DeferredResolver(
+                $this->database->add($value['foes'])
+              ),
             ]
           )
         );
@@ -151,9 +144,7 @@ class DeferredSchema extends AbstractSchema
           [
             'name' => 'users',
             'type' => new ListType(new DeferredUserType($buffer)),
-            'resolve' => function ($value, $args) use ($buffer) {
-                return new DeferredResolver($buffer->add($args['ids']));
-            },
+            'resolve' => fn($value, $args) => new DeferredResolver($buffer->add($args['ids'])),
           ]
         );
 
@@ -176,6 +167,7 @@ class DeferredSchema extends AbstractSchema
     }
 
 
+    #[\Override]
     public function build(SchemaConfig $config)
     {
     }
@@ -186,7 +178,7 @@ class DeferredSchema extends AbstractSchema
 /**
  * Test the deferred resolving under different circumstances.
  */
-class DeferredTest extends \PHPUnit_Framework_TestCase
+class DeferredTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

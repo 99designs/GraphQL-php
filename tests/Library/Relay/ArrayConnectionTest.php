@@ -10,7 +10,7 @@ namespace Youshido\Tests\Library\Relay;
 
 use Youshido\GraphQL\Relay\Connection\ArrayConnection;
 
-class ArrayConnectionTest extends \PHPUnit_Framework_TestCase
+class ArrayConnectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCursors()
     {
@@ -20,6 +20,7 @@ class ArrayConnectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($offset, ArrayConnection::cursorToKey($cursor));
         $this->assertEquals($cursor, ArrayConnection::cursorForObjectInConnection($data, 'd'));
+        $this->expectException(\TypeError::class);
         $this->assertNull(null, ArrayConnection::cursorToKey(null));
 
         $this->assertEquals($offset, ArrayConnection::cursorToOffsetWithDefault($cursor, 2));

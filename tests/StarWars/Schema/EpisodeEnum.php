@@ -13,6 +13,7 @@ use Youshido\GraphQL\Type\Enum\AbstractEnumType;
 class EpisodeEnum extends AbstractEnumType
 {
 
+    #[\Override]
     public function getValues()
     {
         return [
@@ -37,6 +38,7 @@ class EpisodeEnum extends AbstractEnumType
     /**
      * @return String type name
      */
+    #[\Override]
     public function getName()
     {
         return 'Episode';

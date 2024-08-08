@@ -14,6 +14,7 @@ use Youshido\GraphQL\Type\TypeService;
 
 class TestConfig extends AbstractConfig
 {
+    #[\Override]
     public function getRules()
     {
         return [

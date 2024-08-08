@@ -11,7 +11,7 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 
-class Issue193Test extends \PHPUnit_Framework_TestCase
+class Issue193Test extends \PHPUnit\Framework\TestCase
 {
     public function testResolvedInterfacesShouldBeRegistered()
     {
@@ -21,9 +21,7 @@ class Issue193Test extends \PHPUnit_Framework_TestCase
         $processor->processPayload($this->getIntrospectionQuery(), []);
         $resp = $processor->getResponseData();
 
-        $typeNames = array_map(function ($type) {
-            return $type['name'];
-        }, $resp['data']['__schema']['types']);
+        $typeNames = array_map(fn($type) => $type['name'], $resp['data']['__schema']['types']);
 
         // Check that all types are discovered
         $this->assertContains('ContentBlockInterface', $typeNames);
@@ -67,6 +65,7 @@ TEXT;
 
 class Issue193Schema extends AbstractSchema
 {
+    #[\Override]
     public function build(SchemaConfig $config)
     {
         $config->getQuery()->addField(
@@ -81,6 +80,7 @@ class Issue193Schema extends AbstractSchema
 class PostType extends AbstractObjectType
 {
 
+    #[\Override]
     public function build($config)
     {
         $config->applyInterface(new ContentBlockInterface());
@@ -89,6 +89,7 @@ class PostType extends AbstractObjectType
         ]);
     }
 
+    #[\Override]
     public function getInterfaces()
     {
         return [new ContentBlockInterface()];
@@ -97,6 +98,7 @@ class PostType extends AbstractObjectType
 
 class UndiscoveredType extends AbstractObjectType
 {
+    #[\Override]
     public function build($config)
     {
         $config->applyInterface(new ContentBlockInterface());
@@ -105,12 +107,14 @@ class UndiscoveredType extends AbstractObjectType
 
 class ContentBlockInterface extends AbstractInterfaceType
 {
+    #[\Override]
     public function build($config)
     {
         $config->addField('title', new NonNullType(new StringType()));
         $config->addField('summary', new StringType());
     }
 
+    #[\Override]
     public function resolveType($object)
     {
         if (isset($object['title'])) {
@@ -120,6 +124,7 @@ class ContentBlockInterface extends AbstractInterfaceType
         return new UndiscoveredType();
     }
 
+    #[\Override]
     public function getImplementations()
     {
         return [

@@ -19,7 +19,7 @@ use Youshido\Tests\DataProvider\TestEmptySchema;
 use Youshido\Tests\DataProvider\TestObjectType;
 use Youshido\Tests\DataProvider\TestSchema;
 
-class SchemaTest extends \PHPUnit_Framework_TestCase
+class SchemaTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testStandaloneEmptySchema()
@@ -36,7 +36,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($schema->getMutationType()->getFields()));
 
-        $schema->addMutationField('changeUser', ['type' => new TestObjectType(), 'resolve' => function () {
+        $schema->addMutationField('changeUser', ['type' => new TestObjectType(), 'resolve' => function (): void {
         }]);
         $this->assertEquals(2, count($schema->getMutationType()->getFields()));
 
@@ -68,9 +68,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
             'fields'      => [
                 'name' => new StringType(),
             ],
-            'resolveType' => function () use ($authorType) {
-                return $authorType;
-            }
+            'resolveType' => fn() => $authorType
         ]);
 
         $authorType = new ObjectType([
@@ -87,11 +85,9 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                 'fields' => [
                     'user' => [
                         'type'    => $userInterface,
-                        'resolve' => function () {
-                            return [
-                                'name' => 'Alex'
-                            ];
-                        }
+                        'resolve' => fn() => [
+                            'name' => 'Alex'
+                        ]
                     ]
                 ]
             ])
@@ -109,7 +105,11 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     }
                 }');
         $data = $processor->getResponseData();
-        $this->assertArraySubset([11 => ['name' => 'Author']], $data['data']['__schema']['types']);
+
+        foreach ([11 => ['name' => 'Author']] as $key => $value) {
+            $this->assertArrayHasKey($key, $data['data']['__schema']['types']);
+            $this->assertSame($value, $data['data']['__schema']['types'][$key]);
+        }
 
         $processor->processPayload('{ user { name { } } }');
         $result = $processor->getResponseData();

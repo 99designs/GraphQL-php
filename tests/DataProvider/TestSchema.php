@@ -19,28 +19,23 @@ class TestSchema extends AbstractSchema
 {
     private $testStatusValue = 0;
 
+    #[\Override]
     public function build(SchemaConfig $config)
     {
         $config->getQuery()->addFields([
             'me'     => [
                 'type'    => new TestObjectType(),
-                'resolve' => function ($value, $args, ResolveInfo $info) {
-                    return $info->getReturnType()->getData();
-                }
+                'resolve' => fn($value, $args, ResolveInfo $info) => $info->getReturnType()->getData()
             ],
             'status' => [
                 'type'    => new TestEnumType(),
-                'resolve' => function () {
-                    return $this->testStatusValue;
-                }
+                'resolve' => fn() => $this->testStatusValue
             ],
         ]);
         $config->getMutation()->addFields([
             'updateStatus' => [
                 'type'    => new TestEnumType(),
-                'resolve' => function () {
-                    return $this->testStatusValue;
-                },
+                'resolve' => fn() => $this->testStatusValue,
                 'args'    => [
                     'newStatus' => new TestEnumType(),
                     'list' => new ListType(new IntType())

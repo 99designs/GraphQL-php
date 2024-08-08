@@ -16,6 +16,7 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 
 class CharacterInterface extends AbstractInterfaceType
 {
+    #[\Override]
     public function build($config)
     {
         $config
@@ -23,29 +24,30 @@ class CharacterInterface extends AbstractInterfaceType
             ->addField('name', new NonNullType(new StringType()))
             ->addField('friends', [
                 'type'    => new ListType(new CharacterInterface()),
-                'resolve' => function ($value) {
-                    return $value['friends'];
-                }
+                'resolve' => fn($value) => $value['friends']
             ])
             ->addField('appearsIn', new ListType(new EpisodeEnum()));
     }
 
+    #[\Override]
     public function getDescription()
     {
         return 'A character in the Star Wars Trilogy';
     }
 
+    #[\Override]
     public function getName()
     {
         return 'Character';
     }
 
+    #[\Override]
     public function resolveType($object)
     {
         $humans = StarWarsData::humans();
         $droids = StarWarsData::droids();
 
-        $id = isset($object['id']) ? $object['id'] : $object;
+        $id = $object['id'] ?? $object;
 
         if (isset($humans[$id])) {
             return new HumanType();

@@ -16,23 +16,24 @@ class DroidType extends HumanType
     /**
      * @return String type name
      */
+    #[\Override]
     public function getName()
     {
         return 'Droid';
     }
 
+    #[\Override]
     public function build($config)
     {
         parent::build($config);
 
-        $config->getField('friends')->getConfig()->set('resolve', function ($droid) {
-            return StarWarsData::getFriends($droid);
-        });
+        $config->getField('friends')->getConfig()->set('resolve', fn($droid) => StarWarsData::getFriends($droid));
 
         $config
             ->addField('primaryFunction', TypeMap::TYPE_STRING);
     }
 
+    #[\Override]
     public function getInterfaces()
     {
         return [new CharacterInterface()];

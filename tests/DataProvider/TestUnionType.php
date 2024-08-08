@@ -13,6 +13,7 @@ use Youshido\GraphQL\Type\Union\AbstractUnionType;
 class TestUnionType extends AbstractUnionType
 {
 
+    #[\Override]
     public function getTypes()
     {
         return [
@@ -20,11 +21,13 @@ class TestUnionType extends AbstractUnionType
         ];
     }
 
+    #[\Override]
     public function resolveType($object)
     {
         return $object;
     }
 
+    #[\Override]
     public function getDescription()
     {
         return 'Union collect cars types';
