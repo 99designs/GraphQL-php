@@ -12,8 +12,6 @@ class TypeServiceTest extends TestCase
         $object = new DummyObjectWithMagicGet();
 
         // Failing with magic getters, symfony/property-access consider them non-existent
-        //$this->assertEquals('getfoo', TypeService::getPropertyValue($object, 'foo'));
-        //$this->assertEquals('getbar', TypeService::getPropertyValue($object, 'anything'));
         $this->assertNull(TypeService::getPropertyValue($object, 'foo'));
         $this->assertNull(TypeService::getPropertyValue($object, 'anything'));
     }
@@ -25,9 +23,6 @@ class TypeServiceTest extends TestCase
         // __call() should not be considered by default
         $this->assertNull(TypeService::getPropertyValue($object, 'foo'));
         $this->assertNull(TypeService::getPropertyValue($object, 'anything'));
-
-        //$this->assertEquals('callfoo', TypeService::getPropertyValue($object, 'foo'));
-        //$this->assertEquals('callbar', TypeService::getPropertyValue($object, 'anything'));
     }
 }
 
