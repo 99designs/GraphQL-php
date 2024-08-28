@@ -14,6 +14,7 @@ use Youshido\GraphQL\Type\Scalar\AbstractScalarType;
 class TestTimeType extends AbstractScalarType
 {
 
+    #[\Override]
     public function getName()
     {
         return 'TestTime';
@@ -23,6 +24,7 @@ class TestTimeType extends AbstractScalarType
      * @param $value \DateTime
      * @return null|string
      */
+    #[\Override]
     public function serialize($value)
     {
         if ($value === null) {
@@ -32,6 +34,7 @@ class TestTimeType extends AbstractScalarType
         return $value instanceof \DateTime ? $value->format('H:i:s') : $value;
     }
 
+    #[\Override]
     public function isValidValue($value)
     {
         if (is_object($value)) {
@@ -43,6 +46,7 @@ class TestTimeType extends AbstractScalarType
         return $d && $d->format('H:i:s') == $value;
     }
 
+    #[\Override]
     public function getDescription()
     {
         return 'Representation time in "H:i:s" format';

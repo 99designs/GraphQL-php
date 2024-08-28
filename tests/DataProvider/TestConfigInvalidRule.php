@@ -8,6 +8,7 @@ use Youshido\GraphQL\Type\TypeService;
 
 class TestConfigInvalidRule extends AbstractConfig
 {
+    #[\Override]
     public function getRules()
     {
         return [

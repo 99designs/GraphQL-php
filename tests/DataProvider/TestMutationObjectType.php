@@ -15,11 +15,13 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 
 class TestMutationObjectType extends AbstractMutationObjectType
 {
+    #[\Override]
     public function getOutputType()
     {
         return new StringType();
     }
 
+    #[\Override]
     public function build($config)
     {
         $this->addArgument('increment', new IntType());

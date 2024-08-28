@@ -8,6 +8,7 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
 class Issue171Schema extends AbstractSchema
 {
+    #[\Override]
     public function build(SchemaConfig $config)
     {
         $config->getQuery()->addField(
@@ -21,6 +22,7 @@ class Issue171Schema extends AbstractSchema
 
 class PlanType extends AbstractObjectType
 {
+    #[\Override]
     public function build($config)
     {
         $config->addField('kpi_status', [
@@ -31,6 +33,7 @@ class PlanType extends AbstractObjectType
 
 class KpiStatusType extends AbstractEnumType
 {
+    #[\Override]
     public function getValues()
     {
         return [

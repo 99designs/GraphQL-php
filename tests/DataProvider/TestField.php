@@ -18,16 +18,19 @@ class TestField extends AbstractField
     /**
      * @return AbstractObjectType
      */
+    #[\Override]
     public function getType()
     {
         return new IntType();
     }
 
+    #[\Override]
     public function resolve($value, array $args, ResolveInfo $info)
     {
         return $value;
     }
 
+    #[\Override]
     public function getDescription()
     {
         return 'description';

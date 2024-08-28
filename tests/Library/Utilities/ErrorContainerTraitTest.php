@@ -15,12 +15,12 @@ use Youshido\GraphQL\Parser\Location;
 use Youshido\GraphQL\Validator\ErrorContainer\ErrorContainerInterface;
 use Youshido\GraphQL\Validator\ErrorContainer\ErrorContainerTrait;
 
-class ErrorContainerTraitTest extends \PHPUnit_Framework_TestCase implements ErrorContainerInterface
+class ErrorContainerTraitTest extends \PHPUnit\Framework\TestCase implements ErrorContainerInterface
 {
 
     use ErrorContainerTrait;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clearErrors();
     }
@@ -117,6 +117,7 @@ class ErrorContainerTraitTest extends \PHPUnit_Framework_TestCase implements Err
 
 class ExtendedException extends \Exception implements ExtendedExceptionInterface
 {
+    #[\Override]
     public function getExtensions()
     {
         return [
@@ -128,6 +129,7 @@ class ExtendedException extends \Exception implements ExtendedExceptionInterface
 
 class SuperException extends \Exception implements LocationableExceptionInterface, ExtendedExceptionInterface
 {
+    #[\Override]
     public function getExtensions()
     {
         return [
@@ -136,6 +138,7 @@ class SuperException extends \Exception implements LocationableExceptionInterfac
         ];
     }
 
+    #[\Override]
     public function getLocation()
     {
         return new Location(6, 10);

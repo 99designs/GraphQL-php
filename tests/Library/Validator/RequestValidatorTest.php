@@ -19,17 +19,17 @@ use Youshido\GraphQL\Parser\Ast\Query;
 use Youshido\GraphQL\Parser\Location;
 use Youshido\GraphQL\Validator\RequestValidator\RequestValidator;
 
-class RequestValidatorTest extends \PHPUnit_Framework_TestCase
+class RequestValidatorTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @expectedException \Youshido\GraphQL\Exception\Parser\InvalidRequestException
      * @dataProvider invalidRequestProvider
      *
      * @param Request $request
      */
     public function testInvalidRequests(Request $request)
     {
+        $this->expectException(\Youshido\GraphQL\Exception\Parser\InvalidRequestException::class);
         (new RequestValidator())->validate($request);
     }
 
@@ -86,11 +86,12 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
                 ])
             ],
             [
-                new Request([
+                new Request(data: [
                     'queries'            => [
                         new Query('test', null,
                             [
-                                new Argument('test', new VariableReference('test', null, new Location(1, 1)), new Location(1, 1))
+                                new Argument('test', value: new VariableReference('test', variable: null, location: new Location(1, 1)),
+                                    location: new Location(1, 1))
                             ],
                             [
                                 new Field('test', null, [], [], new Location(1, 1))
@@ -100,9 +101,9 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
                         )
                     ],
                     'variableReferences' => [
-                        new VariableReference('test', null, new Location(1, 1))
+                        new VariableReference('test', variable: null, location: new Location(1, 1))
                     ]
-                ], ['test' => 1])
+                ], variables: ['test' => 1])
             ],
             [
                 new Request([

@@ -19,6 +19,7 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 
 class UserType extends AbstractObjectType
 {
+    #[\Override]
     public function build($config)
     {
         $config->addFields([
@@ -32,6 +33,7 @@ class UserType extends AbstractObjectType
 class CourtReservation extends AbstractObjectType
 {
 
+    #[\Override]
     public function build($config)
     {
         $config->addFields([
@@ -46,6 +48,7 @@ class CourtReservation extends AbstractObjectType
         ]);
     }
 
+    #[\Override]
     public function getInterfaces()
     {
         return [new ReservationInterface()];
@@ -55,6 +58,7 @@ class CourtReservation extends AbstractObjectType
 
 class ClassReservation extends AbstractObjectType
 {
+    #[\Override]
     public function build($config)
     {
         $config->addFields([
@@ -63,6 +67,7 @@ class ClassReservation extends AbstractObjectType
         ]);
     }
 
+    #[\Override]
     public function getInterfaces()
     {
         return [new ReservationInterface()];
@@ -71,11 +76,13 @@ class ClassReservation extends AbstractObjectType
 
 class ReservationInterface extends AbstractInterfaceType
 {
+    #[\Override]
     public function resolveType($object)
     {
-        return strpos($object['id'], 'cl') === false ? new CourtReservation() : new ClassReservation();
+        return !str_contains((string) $object['id'], 'cl') ? new CourtReservation() : new ClassReservation();
     }
 
+    #[\Override]
     public function build($config)
     {
         $config->addFields([
@@ -85,7 +92,7 @@ class ReservationInterface extends AbstractInterfaceType
 
 }
 
-class FragmentsTest extends \PHPUnit_Framework_TestCase
+class FragmentsTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -103,33 +110,31 @@ class FragmentsTest extends \PHPUnit_Framework_TestCase
                 'fields' => [
                     'user' => [
                         'type'    => new UserType(),
-                        'resolve' => function ($args) {
-                            return [
-                                'id'           => 'user-id-1',
-                                'fullName'     => 'Alex',
-                                'reservations' => [
-                                    [
-                                        'id'   => 'cl-1',
-                                        'user' => [
-                                            'id'       => 'user-id-2',
-                                            'fullName' => 'User class1'
-                                        ],
+                        'resolve' => fn($args) => [
+                            'id'           => 'user-id-1',
+                            'fullName'     => 'Alex',
+                            'reservations' => [
+                                [
+                                    'id'   => 'cl-1',
+                                    'user' => [
+                                        'id'       => 'user-id-2',
+                                        'fullName' => 'User class1'
                                     ],
-                                    [
-                                        'id'      => 'court-1',
-                                        'players' => [
-                                            [
-                                                'id'   => 'player-id-1',
-                                                'user' => [
-                                                    'id'       => 'user-id-3',
-                                                    'fullName' => 'User court1'
-                                                ]
+                                ],
+                                [
+                                    'id'      => 'court-1',
+                                    'players' => [
+                                        [
+                                            'id'   => 'player-id-1',
+                                            'user' => [
+                                                'id'       => 'user-id-3',
+                                                'fullName' => 'User court1'
                                             ]
                                         ]
-                                    ],
-                                ]
-                            ];
-                        },
+                                    ]
+                                ],
+                            ]
+                        ],
                     ],
                 ]
             ])
@@ -217,12 +222,10 @@ class FragmentsTest extends \PHPUnit_Framework_TestCase
                 'fields' => [
                     'user' => [
                         'type'    => new UserType(),
-                        'resolve' => function ($args) {
-                            return [
-                                'id'       => 'user-id-1',
-                                'fullName' => 'Alex',
-                            ];
-                        },
+                        'resolve' => fn($args) => [
+                            'id'       => 'user-id-1',
+                            'fullName' => 'Alex',
+                        ],
                         'args' => [
                             'id' => new IntType(),
                         ]

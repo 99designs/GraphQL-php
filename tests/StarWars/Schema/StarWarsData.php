@@ -119,11 +119,8 @@ class StarWarsData
         if (isset($humans[$id])) {
             return $humans[$id];
         }
-        if (isset($droids[$id])) {
-            return $droids[$id];
-        }
 
-        return null;
+        return $droids[$id] ?? null;
     }
 
     /**
@@ -146,6 +143,6 @@ class StarWarsData
      */
     static function getFriends($character)
     {
-        return array_map([__CLASS__, 'getCharacter'], $character['friends']);
+        return array_map(self::getCharacter(...), $character['friends']);
     }
 }

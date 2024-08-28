@@ -18,16 +18,19 @@ class TestInputField extends AbstractInputField
     /**
      * @return InputTypeInterface
      */
+    #[\Override]
     public function getType()
     {
         return new IntType();
     }
 
+    #[\Override]
     public function getDescription()
     {
         return 'description';
     }
 
+    #[\Override]
     public function getDefaultValue()
     {
         return 'default';

@@ -14,7 +14,7 @@ use Youshido\GraphQL\Type\Scalar\IdType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 
-class MutationTest extends \PHPUnit_Framework_TestCase
+class MutationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testCreation()
@@ -24,20 +24,18 @@ class MutationTest extends \PHPUnit_Framework_TestCase
         ],[
             'id' => new IdType(),
             'name' => new StringType()
-        ], function($source, $args, $info) {
+        ], function($source, $args, $info): void {
 
         });
         $this->assertEquals('ship', $mutation->getName());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testInvalidType()
     {
+        $this->expectException(\Exception::class);
         RelayMutation::buildMutation('ship', [
             'name' => new StringType()
-        ], new IntType(), function($source, $args, $info) {});
+        ], new IntType(), function($source, $args, $info): void {});
 
     }
 

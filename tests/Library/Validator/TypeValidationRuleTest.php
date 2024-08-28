@@ -19,7 +19,7 @@ use Youshido\Tests\DataProvider\TestInputField;
 use Youshido\Tests\DataProvider\TestInputObjectType;
 use Youshido\Tests\DataProvider\TestObjectType;
 
-class TypeValidationRuleTest extends \PHPUnit_Framework_TestCase
+class TypeValidationRuleTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -27,7 +27,7 @@ class TypeValidationRuleTest extends \PHPUnit_Framework_TestCase
      */
     protected $rule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rule = new TypeValidationRule(ConfigValidator::getInstance());
     }
@@ -55,7 +55,7 @@ class TypeValidationRuleTest extends \PHPUnit_Framework_TestCase
             [TypeService::TYPE_ANY_OBJECT, new StringType()],
             [TypeService::TYPE_ANY_OBJECT, null, false],
 
-            [TypeService::TYPE_CALLABLE, function () { }],
+            [TypeService::TYPE_CALLABLE, function (): void { }],
             [TypeService::TYPE_CALLABLE, null, false],
 
             [TypeService::TYPE_BOOLEAN, true],
